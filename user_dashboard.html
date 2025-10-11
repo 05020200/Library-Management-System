@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LibraryHub - Member Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+
+    <style>
+        :root {
+            --primary: 221 83% 53%;
+            --primary-foreground: 210 40% 98%;
+            --secondary: 210 40% 96.1%;
+            --secondary-foreground: 222.2 47.4% 11.2%;
+            --muted: 210 40% 96.1%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+            --accent: 210 40% 96.1%;
+            --accent-foreground: 222.2 47.4% 11.2%;
+            --destructive: 0 84.2% 60.2%;
+            --destructive-foreground: 210 40% 98%;
+            --border: 214.3 31.8% 91.4%;
+            --input: 214.3 31.8% 91.4%;
+            --ring: 221 83% 53%;
+            --background: 0 0% 100%;
+            --foreground: 222.2 84% 4.9%;
+            --card: 0 0% 100%;
+            --card-foreground: 222.2 84% 4.9%;
+            --success: 142 76% 36%;
+            --warning: 38 92% 50%;
+            --sidebar-background: 0 0% 98%;
+            --sidebar-foreground: 222.2 84% 4.9%;
+            --sidebar-primary: 221 83% 53%;
+            --sidebar-accent: 210 40% 96.1%;
+            --sidebar-border: 214.3 31.8% 91.4%;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .sidebar {
+            background-color: hsl(var(--sidebar-background));
+            border-right: 1px solid hsl(var(--sidebar-border));
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            border-bottom: 1px solid hsl(var(--sidebar-border));
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .nav-link:hover {
+            background-color: hsl(var(--sidebar-accent) / 0.5);
+        }
+
+        .nav-link.active {
+            background-color: hsl(var(--sidebar-accent));
+            color: hsl(var(--sidebar-primary));
+            font-weight: 500;
+        }
+
+        .card {
+            background-color: hsl(var(--card));
+            border: 1px solid hsl(var(--border));
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            transform: translateY(-4px);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 9999px;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border: 1px solid;
+        }
+
+        .badge-outline {
+            background-color: transparent;
+        }
+
+        .badge-destructive {
+            background-color: hsl(var(--destructive));
+            color: hsl(var(--destructive-foreground));
+            border-color: hsl(var(--destructive));
+        }
+
+        .badge-success {
+            border-color: hsl(var(--success));
+            color: hsl(var(--success));
+        }
+
+        .badge-warning {
+            border-color: hsl(var(--warning));
+            color: hsl(var(--warning));
+        }
+
+        .genre-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .genre-box::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            opacity: 0.9;
+        }
+
+        .genre-title {
+            position: relative;
+            z-index: 1;
+            font-weight: bold;
+            text-align: center;
+            padding: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+       /* In your <style> tag, replace the old genre styles with these */
+
+/* --- THIS ENTIRE GENRE SECTION IS UPDATED --- */
+genre-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: #eee; /* Fallback color */
+}
+
+.genre-title {
+    position: relative;
+    z-index: 1;
+    font-weight: bold;
+    text-align: center;
+    padding: 0.5rem;
+    color: white;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    font-family: 'Georgia', serif;
+}
+
+/* --- NEW & IMPROVED Decorative Genre Styles --- */
+
+/* Romance: A pattern of red hearts */
+/* In your <style> tag, replace the .genre-romance rule with this */
+
+/* Romance: Soft pink with a large, elegant heart */
+.genre-romance {
+    background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+    position: relative; /* Needed for the heart shape */
+    z-index: 0;
+}
+
+.genre-romance::before {
+    content: '♥'; /* This is the Unicode heart character */
+    position: absolute;
+    font-size: 160px; /* Adjust size of the heart */
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.3); /* Soft white and semi-transparent */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centers the heart */
+    z-index: -1; /* Places the heart behind the text */
+}
+
+.genre-romance .genre-title {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.4em;
+    color: #880e4f; /* Deep rose color for the text */
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7);
+}
+/* Fantasy: A magical starry night */
+.genre-fantasy {
+    background-color: #1d1233; /* Deep twilight purple */
+    background-image:
+        /* Sparkles layer */
+        radial-gradient(circle at 70% 80%, #f1c40f 0px, transparent 1px),
+        radial-gradient(circle at 20% 15%, #f1c40f 0px, transparent 1px),
+        /* Magical bokeh (blurry lights) layer */
+        radial-gradient(circle at 15% 25%, #9b59b688 0%, transparent 40%),
+        radial-gradient(circle at 85% 60%, #3498db88 0%, transparent 40%),
+        radial-gradient(circle at 45% 75%, #e74c3c88 0%, transparent 40%);
+    background-size: 100px 100px, 120px 120px, 100% 100%, 100% 100%, 100% 100%;
+    background-repeat: repeat, repeat, no-repeat, no-repeat, no-repeat;
+}
+.genre-fantasy .genre-title {
+    font-family: 'Cinzel Decorative', cursive;
+    color: #f1e4d3; /* Soft cream/gold color */
+    text-shadow: 0 0 5px #f39c12, 0 0 10px #f39c12; /* Golden glow */
+}
+/* Self-Help: Inspired by Atomic Habits */
+.genre-self-help {
+    background-color: #fff8e1;
+    background-image:
+        linear-gradient(90deg, #ffd54f 1px, transparent 1px),
+        linear-gradient(180deg, #ffd54f 1px, transparent 1px),
+        radial-gradient(circle at 25px 25px, #ffb300 8px, transparent 9px),
+        radial-gradient(circle at 75px 75px, #ffb300 8px, transparent 9px);
+    background-size: 100px 100px, 100px 100px, 100px 100px, 100px 100px;
+}
+.genre-self-help .genre-title { color: #bf360c; text-shadow: none; font-family: 'Poppins', sans-serif; }
+
+/* Science Fiction: Digital circuit board */
+.genre-science-fiction {
+    background-color: #000;
+    background-image:
+        /* Faint stars layer */
+        radial-gradient(circle at 60% 70%, #ffffff55 0, transparent 1px),
+        radial-gradient(circle at 10% 20%, #ffffff66 0, transparent 1.5px),
+        radial-gradient(circle at 80% 20%, #ffffff77 0, transparent 1px),
+        /* Swirling nebula gas layers */
+        radial-gradient(ellipse at 30% 25%, #9c27b077, transparent 70%),
+        radial-gradient(ellipse at 70% 65%, #2196f366, transparent 70%);
+}
+.genre-science-fiction .genre-title { 
+    font-family: 'Orbitron', sans-serif; 
+    text-transform: uppercase;
+    color: #ffffff; /* Bright white text */
+    text-shadow: 0 0 5px #00e5ff, 0 0 10px #00e5ff; /* Stronger glow */
+}
+/* Mystery: Fingerprint whorls */
+.genre-mystery {
+    background: #454545;
+    background-image: radial-gradient(circle at 1px 1px, #ffffff44 1px, transparent 0);
+    background-size: 20px 20px;
+}
+.genre-mystery .genre-title { font-family: 'Garamond', serif; font-style: italic; }
+
+/* Fiction: Abstract paint strokes */
+.genre-fiction {
+    background: linear-gradient(135deg, #6e45e2 0%, #88d3ce 100%);
+}
+.genre-fiction .genre-title { font-family: 'Playfair Display', serif; }
+
+/* Non-Fiction: Blueprint grid */
+.genre-non-fiction {
+    background-color: #e3f2fd;
+    background-image:
+        linear-gradient(#bbdefb 1px, transparent 1px),
+        linear-gradient(90deg, #bbdefb 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+.genre-non-fiction .genre-title { color: #0d47a1; text-shadow: none; font-family: 'Roboto', sans-serif; }
+
+/* Thriller: Sharp, tense lines */
+.genre-thriller {
+    background-color: #000;
+    background-image: repeating-linear-gradient(45deg, #b71c1c 0, #b71c1c 2px, transparent 2px, transparent 10px);
+}
+.genre-thriller .genre-title { color: #fafafa; font-family: 'Anton', sans-serif; letter-spacing: 1px; }
+
+/* Biography: Classic linen texture */
+.genre-biography {
+    background-color: #f5f5f5;
+    background-image: linear-gradient(45deg, #e0e0e0 25%, transparent 25%),
+                      linear-gradient(-45deg, #e0e0e0 25%, transparent 25%),
+                      linear-gradient(45deg, transparent 75%, #e0e0e0 75%),
+                      linear-gradient(-45deg, transparent 75%, #e0e0e0 75%);
+    background-size: 20px 20px;
+}
+.genre-biography .genre-title { color: #333; text-shadow: none; font-family: 'Libre Baskerville', serif; }
+
+/* History: Aged papyrus */
+.genre-history {
+    background: #fdf5e6;
+    background-image: linear-gradient(to bottom, rgba(210,180,140,0.4), rgba(210,180,140,0.6));
+}
+.genre-history .genre-title { font-family: 'Trajan Pro', serif; color: #5d4037; text-shadow: none; }
+
+/* Other: Simple neutral gradient */
+.genre-other {
+    background: #CFD8DC;
+    background: linear-gradient(to right, #ECEFF1, #CFD8DC);
+}
+.genre-other .genre-title { color: #37474F; text-shadow: none; font-family: 'Lato', sans-serif; }
+/* --- END OF UPDATED SECTION --- */
+        .btn-remove {
+            background-color: hsl(var(--destructive));
+            color: hsl(var(--destructive-foreground));
+            border-color: hsl(var(--destructive));
+        }
+
+        .btn-remove:hover {
+            opacity: 0.9;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            border-radius: 0.375rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border-color: hsl(var(--input));
+            color: hsl(var(--foreground));
+        }
+
+        .btn-outline:hover {
+            background-color: hsl(var(--accent));
+        }
+
+        .input {
+            width: 100%;
+            height: 2.5rem;
+            border-radius: 0.375rem;
+            border: 1px solid hsl(var(--input));
+            background-color: hsl(var(--background));
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .input:focus {
+            outline: none;
+            ring: 2px;
+            ring-color: hsl(var(--ring));
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                z-index: 50;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="flex min-h-screen w-full">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar w-64 flex flex-col">
+            <div class="sidebar-header px-6 py-4">
+                <div class="flex items-center gap-3">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-lg" style="background-color: hsl(var(--primary)); color: hsl(var(--primary-foreground));">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+                    </div>
+                    <div>
+                        <h2 class="font-semibold">LibraryHub</h2>
+                        <p class="text-xs" style="color: hsl(var(--muted-foreground));">Member Portal</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-1 p-4">
+                <p class="px-4 py-2 text-xs font-semibold" style="color: hsl(var(--muted-foreground));">Navigation</p>
+                <nav class="space-y-1">
+                    <div class="nav-link active" data-page="books">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+                        <span>My Books</span>
+                    </div>
+                    <div class="nav-link" data-page="wishlist">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                        <span>Wishlist</span>
+                    </div>
+                    <div class="nav-link" data-page="history">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
+                        <span>History</span>
+                    </div>
+                    <div class="nav-link" data-page="profile">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        <span>Profile</span>
+                    </div>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1">
+            <!-- Header -->
+            <header class="sticky top-0 z-10 border-b" style="border-color: hsl(var(--border)); background-color: hsl(var(--card) / 0.95); backdrop-filter: blur(8px);">
+                <div class="flex h-16 items-center gap-4 px-6">
+                    <button id="sidebarToggle" class="md:hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/></svg>
+                    </button>
+                    <div class="flex-1 max-w-2xl">
+                        <div class="relative">
+                            <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" style="color: hsl(var(--muted-foreground));" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                            <input id="searchInput" type="text" class="input pl-10" placeholder="Search books, authors, or genres...">
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                   <div class="text-right">
+    <p class="text-sm font-medium" id="headerUserName">Loading...</p>
+    <p class="text-xs" style="color: hsl(var(--muted-foreground));">Member</p>
+</div>
+<div id="headerUserInitial" class="flex h-10 w-10 items-center justify-center rounded-full font-semibold" style="background-color: hsl(var(--primary)); color: hsl(var(--primary-foreground));">
+    </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page: My Books -->
+            <main id="page-books" class="p-6 space-y-8">
+                <div class="space-y-2">
+                  <h1 class="text-3xl font-bold" id="welcomeMessage">Welcome back! 👋</h1>
+                    <p style="color: hsl(var(--muted-foreground));">Here's what's happening with your library account today</p>
+                </div>
+
+                <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                    <div class="card">
+                        <div class="p-6">
+                            <div class="flex items-start justify-between">
+                                <div class="space-y-2">
+                                    <p class="text-sm font-medium" style="color: hsl(var(--muted-foreground));">Books Currently Borrowed</p>
+                                    <h3 class="text-3xl font-bold">3</h3>
+                                </div>
+                                <div class="rounded-lg p-3" style="background-color: hsl(var(--primary) / 0.1); color: hsl(var(--primary));">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="p-6">
+                            <div class="flex items-start justify-between">
+                                <div class="space-y-2">
+                                    <p class="text-sm font-medium" style="color: hsl(var(--muted-foreground));">Overdue Books</p>
+                                    <h3 class="text-3xl font-bold">0</h3>
+                                </div>
+                                <div class="rounded-lg p-3" style="background-color: hsl(var(--success) / 0.1); color: hsl(var(--success));">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="p-6">
+                            <div class="flex items-start justify-between">
+                                <div class="space-y-2">
+                                    <p class="text-sm font-medium" style="color: hsl(var(--muted-foreground));">Current Fines</p>
+                                    <h3 class="text-3xl font-bold">₹0.00</h3>
+                                </div>
+                                <div class="rounded-lg p-3" style="background-color: hsl(var(--success) / 0.1); color: hsl(var(--success));">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="p-6">
+                            <div class="flex items-start justify-between">
+                                <div class="space-y-2">
+                                    <p class="text-sm font-medium" style="color: hsl(var(--muted-foreground));">Books on Hold</p>
+                                    <h3 class="text-3xl font-bold">2</h3>
+                                </div>
+                                <div class="rounded-lg p-3" style="background-color: hsl(var(--primary) / 0.1); color: hsl(var(--primary));">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="m9 9.5 2 2 4-4"/></svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <h2 class="text-2xl font-bold">Currently Borrowed Books</h2>
+                        <p class="text-sm mt-1" style="color: hsl(var(--muted-foreground));">Keep track of your reading deadlines</p>
+                    </div>
+
+                    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                        <div class="card">
+                            <div class="p-0">
+                                <div class="flex gap-4 p-4">
+                                    <div class="flex-shrink-0">
+                                        <div class="h-40 w-28 rounded-md shadow-md genre-box genre-fiction">
+                                            <div class="genre-title text-sm">Fiction</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-1 flex-col justify-between">
+                                        <div>
+                                            <h4 class="font-semibold">The Midnight Library</h4>
+                                            <p class="mt-1 text-sm" style="color: hsl(var(--muted-foreground));">Matt Haig</p>
+                                        </div>
+                                        <div class="space-y-2">
+                                            <div class="flex items-center gap-2 text-sm" style="color: hsl(var(--muted-foreground));">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                                                <span>Due: 10/15/2025</span>
+                                            </div>
+                                            <span class="badge badge-outline badge-success">5 days remaining</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="p-0">
+                                <div class="flex gap-4 p-4">
+                                    <div class="flex-shrink-0">
+                                        <div class="h-40 w-28 rounded-md shadow-md genre-box genre-self-help">
+                                            <div class="genre-title text-sm">Self-Help</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-1 flex-col justify-between">
+                                        <div>
+                                            <h4 class="font-semibold">Atomic Habits</h4>
+                                            <p class="mt-1 text-sm" style="color: hsl(var(--muted-foreground));">James Clear</p>
+                                        </div>
+                                        <div class="space-y-2">
+                                            <div class="flex items-center gap-2 text-sm" style="color: hsl(var(--muted-foreground));">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                                                <span>Due: 10/20/2025</span>
+                                            </div>
+                                            <span class="badge badge-outline badge-success">10 days remaining</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="p-0">
+                                <div class="flex gap-4 p-4">
+                                    <div class="flex-shrink-0">
+                                        <div class="h-40 w-28 rounded-md shadow-md genre-box genre-science-fiction">
+                                            <div class="genre-title text-xs">Science Fiction</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-1 flex-col justify-between">
+                                        <div>
+                                            <h4 class="font-semibold">Project Hail Mary</h4>
+                                            <p class="mt-1 text-sm" style="color: hsl(var(--muted-foreground));">Andy Weir</p>
+                                        </div>
+                                        <div class="space-y-2">
+                                            <div class="flex items-center gap-2 text-sm" style="color: hsl(var(--muted-foreground));">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                                                <span>Due: 10/12/2025</span>
+                                            </div>
+                                            <span class="badge badge-outline badge-warning">Due in 2 days</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Page: Wishlist -->
+            <main id="page-wishlist" class="p-6 space-y-8 hidden">
+                <div class="flex items-start justify-between">
+                    <div class="space-y-2">
+                        <h1 class="text-3xl font-bold flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: hsl(var(--primary));"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                            My Wishlist
+                        </h1>
+                        <p style="color: hsl(var(--muted-foreground));">Books you want to read next</p>
+                    </div>
+                    <button onclick="addBookToWishlist()" class="btn" style="background-color: hsl(var(--primary)); color: hsl(var(--primary-foreground));">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                        Add Book
+                    </button>
+                </div>
+
+                <div id="wishlist-items" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    <div class="card wishlist-item" data-title="The Seven Husbands of Evelyn Hugo" data-author="Taylor Jenkins Reid" data-status="Available" data-genre="Romance">
+                        <div class="p-6">
+                            <div class="flex gap-4">
+                                <div class="flex-shrink-0">
+                                    <div class="h-40 w-28 rounded-md shadow-md genre-box genre-romance">
+                                        <div class="genre-title text-sm">Romance</div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-1 flex-col justify-between">
+                                    <div>
+                                        <h4 class="font-semibold">The Seven Husbands of Evelyn Hugo</h4>
+                                        <p class="mt-1 text-sm" style="color: hsl(var(--muted-foreground));">Taylor Jenkins Reid</p>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <span class="badge badge-outline" style="border-color: hsl(var(--primary)); color: hsl(var(--primary));">Available</span>
+                                        <div class="flex gap-2 flex-wrap">
+                                            <button class="btn btn-outline text-xs py-1 px-3 view-details-btn" onclick="viewBookDetails('The Seven Husbands of Evelyn Hugo', 'Taylor Jenkins Reid', 'Available', 'A captivating story about a Hollywood legend.')">View Details</button>
+                                            <button class="btn btn-outline text-xs py-1 px-3" onclick="reserveBook('The Seven Husbands of Evelyn Hugo', 'Taylor Jenkins Reid')">Reserve</button>
+                                            <button class="btn btn-remove text-xs py-1 px-3" onclick="removeFromWishlist(this)">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card wishlist-item" data-title="Where the Crawdads Sing" data-author="Delia Owens" data-status="2 holds" data-genre="Mystery">
+                        <div class="p-6">
+                            <div class="flex gap-4">
+                                <div class="flex-shrink-0">
+                                    <div class="h-40 w-28 rounded-md shadow-md genre-box genre-mystery">
+                                        <div class="genre-title text-sm">Mystery</div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-1 flex-col justify-between">
+                                    <div>
+                                        <h4 class="font-semibold">Where the Crawdads Sing</h4>
+                                        <p class="mt-1 text-sm" style="color: hsl(var(--muted-foreground));">Delia Owens</p>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <span class="badge badge-outline badge-warning">2 holds</span>
+                                        <div class="flex gap-2 flex-wrap">
+                                            <button class="btn btn-outline text-xs py-1 px-3 view-details-btn" onclick="viewBookDetails('Where the Crawdads Sing', 'Delia Owens', '2 holds', 'A bestselling novel about survival and resilience.')">View Details</button>
+                                            <button class="btn btn-outline text-xs py-1 px-3" onclick="reserveBook('Where the Crawdads Sing', 'Delia Owens')">Reserve</button>
+                                            <button class="btn btn-remove text-xs py-1 px-3" onclick="removeFromWishlist(this)">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card wishlist-item" data-title="The Silent Patient" data-author="Alex Michaelides" data-status="Available" data-genre="Thriller">
+                        <div class="p-6">
+                            <div class="flex gap-4">
+                                <div class="flex-shrink-0">
+                                    <div class="h-40 w-28 rounded-md shadow-md genre-box genre-thriller">
+                                        <div class="genre-title text-sm">Thriller</div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-1 flex-col justify-between">
+                                    <div>
+                                        <h4 class="font-semibold">The Silent Patient</h4>
+                                        <p class="mt-1 text-sm" style="color: hsl(var(--muted-foreground));">Alex Michaelides</p>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <span class="badge badge-outline" style="border-color: hsl(var(--primary)); color: hsl(var(--primary));">Available</span>
+                                        <div class="flex gap-2 flex-wrap">
+                                            <button class="btn btn-outline text-xs py-1 px-3 view-details-btn" onclick="viewBookDetails('The Silent Patient', 'Alex Michaelides', 'Available', 'A gripping psychological thriller.')">View Details</button>
+                                            <button class="btn btn-outline text-xs py-1 px-3" onclick="reserveBook('The Silent Patient', 'Alex Michaelides')">Reserve</button>
+                                            <button class="btn btn-remove text-xs py-1 px-3" onclick="removeFromWishlist(this)">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card wishlist-item" data-title="Educated" data-author="Tara Westover" data-status="Available" data-genre="Biography">
+                        <div class="p-6">
+                            <div class="flex gap-4">
+                                <div class="flex-shrink-0">
+                                    <div class="h-40 w-28 rounded-md shadow-md genre-box genre-biography">
+                                        <div class="genre-title text-sm">Biography</div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-1 flex-col justify-between">
+                                    <div>
+                                        <h4 class="font-semibold">Educated</h4>
+                                        <p class="mt-1 text-sm" style="color: hsl(var(--muted-foreground));">Tara Westover</p>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <span class="badge badge-outline" style="border-color: hsl(var(--primary)); color: hsl(var(--primary));">Available</span>
+                                        <div class="flex gap-2 flex-wrap">
+                                            <button class="btn btn-outline text-xs py-1 px-3 view-details-btn" onclick="viewBookDetails('Educated', 'Tara Westover', 'Available', 'A powerful memoir about education and self-invention.')">View Details</button>
+                                            <button class="btn btn-outline text-xs py-1 px-3" onclick="reserveBook('Educated', 'Tara Westover')">Reserve</button>
+                                            <button class="btn btn-remove text-xs py-1 px-3" onclick="removeFromWishlist(this)">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Page: History -->
+            <main id="page-history" class="p-6 space-y-8 hidden">
+                <div class="space-y-2">
+                    <h1 class="text-3xl font-bold flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: hsl(var(--primary));"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
+                        Borrowing History
+                    </h1>
+                    <p style="color: hsl(var(--muted-foreground));">Your complete reading journey</p>
+                </div>
+
+                <div class="grid gap-4">
+                    <div class="card">
+                        <div class="p-6">
+                            <div class="flex items-start justify-between">
+                                <div class="space-y-2 flex-1">
+                                    <h3 class="text-xl font-semibold">The Great Gatsby</h3>
+                                    <p style="color: hsl(var(--muted-foreground));">F. Scott Fitzgerald</p>
+                                    <div class="flex gap-4 text-sm" style="color: hsl(var(--muted-foreground));">
+                                        <span>Borrowed: 8/1/2025</span>
+                                        <span>•</span>
+                                        <span>Returned: 8/20/2025</span>
+                                    </div>
+                                </div>
+                                <span class="badge badge-outline badge-success gap-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                    Returned
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="p-6">
+                            <div class="flex items-start justify-between">
+                                <div class="space-y-2 flex-1">
+                                    <h3 class="text-xl font-semibold">To Kill a Mockingbird</h3>
+                                    <p style="color: hsl(var(--muted-foreground));">Harper Lee</p>
+                                    <div class="flex gap-4 text-sm" style="color: hsl(var(--muted-foreground));">
+                                        <span>Borrowed: 8/15/2025</span>
+                                        <span>•</span>
+                                        <span>Returned: 9/5/2025</span>
+                                    </div>
+                                </div>
+                                <span class="badge badge-outline badge-success gap-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                    Returned
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="p-6">
+                            <div class="flex items-start justify-between">
+                                <div class="space-y-2 flex-1">
+                                    <h3 class="text-xl font-semibold">1984</h3>
+                                    <p style="color: hsl(var(--muted-foreground));">George Orwell</p>
+                                    <div class="flex gap-4 text-sm" style="color: hsl(var(--muted-foreground));">
+                                        <span>Borrowed: 9/1/2025</span>
+                                        <span>•</span>
+                                        <span>Returned: 9/22/2025</span>
+                                    </div>
+                                </div>
+                                <span class="badge badge-outline badge-success gap-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                    Returned
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="p-6">
+                            <div class="flex items-start justify-between">
+                                <div class="space-y-2 flex-1">
+                                    <h3 class="text-xl font-semibold">Pride and Prejudice</h3>
+                                    <p style="color: hsl(var(--muted-foreground));">Jane Austen</p>
+                                    <div class="flex gap-4 text-sm" style="color: hsl(var(--muted-foreground));">
+                                        <span>Borrowed: 9/10/2025</span>
+                                        <span>•</span>
+                                        <span>Returned: 9/28/2025</span>
+                                    </div>
+                                </div>
+                                <span class="badge badge-outline badge-success gap-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                    Returned
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Page: Profile -->
+            <main id="page-profile" class="p-6 space-y-8 hidden">
+                <div class="space-y-2">
+                    <h1 class="text-3xl font-bold flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: hsl(var(--primary));"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        My Profile
+                    </h1>
+                    <p style="color: hsl(var(--muted-foreground));">Manage your account information</p>
+                </div>
+
+                <div class="grid gap-6 max-w-3xl">
+                    <div class="card">
+                        <div class="p-6">
+                            <div class="flex items-center gap-6">
+                                <div id="profileUserInitial" class="flex h-24 w-24 items-center justify-center rounded-full text-4xl font-bold" style="background-color: hsl(var(--primary)); color: hsl(var(--primary-foreground));">
+    </div>
+<div class="flex-1 space-y-2">
+    <h2 class="text-2xl font-bold" id="profileFullName">Loading...</h2>
+    <p style="color: hsl(var(--muted-foreground));">Premium Member</p>
+                                    <button class="btn btn-outline" onclick="editProfile()">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                                        Edit Profile
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-6">Personal Information</h3>
+                            <div class="space-y-6">
+                                <div class="space-y-2">
+                                    <label class="flex items-center gap-2 text-sm font-medium" style="color: hsl(var(--muted-foreground));">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                                        Email Address
+                                    </label>
+                                   <input type="text" id="profileEmail" readonly class="input" style="background-color: hsl(var(--muted) / 0.3);">
+                                </div>
+
+                                <div class="space-y-2">
+                                    <label class="flex items-center gap-2 text-sm font-medium" style="color: hsl(var(--muted-foreground));">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                        Phone Number
+                                    </label>
+                                    <input type="text" id="profilePhone" value="Data not available" readonly class="input" style="background-color: hsl(var(--muted) / 0.3);">
+                                </div>
+
+                                <div class="space-y-2">
+                                    <label class="flex items-center gap-2 text-sm font-medium" style="color: hsl(var(--muted-foreground));">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                                        Address
+                                    </label>
+                                    <input type="text" id="profileAddress" value="Data not available" readonly class="input" style="background-color: hsl(var(--muted) / 0.3);">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-4">Membership Details</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between py-2" style="border-bottom: 1px solid hsl(var(--border));">
+                                    <div class="flex items-center gap-2" style="color: hsl(var(--muted-foreground));">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                                        <span>Member Since</span>
+                                    </div>
+                                    <span class="font-medium">1/15/2023</span>
+                                </div>
+
+                                <div class="flex items-center justify-between py-2" style="border-bottom: 1px solid hsl(var(--border));">
+                                    <span style="color: hsl(var(--muted-foreground));">Membership Type</span>
+                                    <span class="font-medium">Premium Member</span>
+                                </div>
+
+                                <div class="flex items-center justify-between py-2">
+                                    <span style="color: hsl(var(--muted-foreground));">Library Card Number</span>
+                                    <span class="font-mono font-medium">LIB-2023-001234</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Page: Reserve Book -->
+            <main id="page-reserve" class="p-6 space-y-8 hidden">
+                <div class="space-y-2">
+                    <button onclick="goToWishlist()" class="btn btn-outline mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+                        Back to Wishlist
+                    </button>
+                    <h1 class="text-3xl font-bold">Reserve a Book</h1>
+                    <p style="color: hsl(var(--muted-foreground));">Place a hold on <span id="reserve-book-title" class="font-semibold"></span></p>
+                </div>
+
+                <div class="max-w-2xl">
+                    <div class="card">
+                        <div class="p-6">
+                            <div class="space-y-6">
+                                <div class="flex gap-4">
+                                    <div class="flex-shrink-0">
+                                        <div id="reserve-book-cover" class="h-48 w-32 rounded-md shadow-md" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);"></div>
+                                    </div>
+                                    <div class="flex-1 space-y-2">
+                                        <h3 class="text-xl font-bold" id="reserve-book-title-main"></h3>
+                                        <p style="color: hsl(var(--muted-foreground));" id="reserve-book-author"></p>
+                                        <span class="badge badge-outline" style="border-color: hsl(var(--primary)); color: hsl(var(--primary));">Available for Hold</span>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-4">
+                                    <h4 class="font-semibold">Reservation Details</h4>
+                                    <div class="space-y-2">
+                                        <label class="text-sm font-medium" style="color: hsl(var(--muted-foreground));">Pickup Library Branch</label>
+                                        <select class="input">
+                                            <option>Main Branch - Downtown</option>
+                                            <option>North Branch</option>
+                                            <option>South Branch</option>
+                                            <option>East Branch</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <label class="text-sm font-medium" style="color: hsl(var(--muted-foreground));">Expected Wait Time</label>
+                                        <input type="text" value="1-2 days" readonly class="input" style="background-color: hsl(var(--muted) / 0.3);">
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <label class="text-sm font-medium" style="color: hsl(var(--muted-foreground));">Notification Preference</label>
+                                        <select class="input">
+                                            <option>Email</option>
+                                            <option>SMS</option>
+                                            <option>Both Email and SMS</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="flex gap-3 pt-4">
+                                        <button onclick="confirmReservation()" class="btn" style="background-color: hsl(var(--primary)); color: hsl(var(--primary-foreground)); flex: 1;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                                            Confirm Reservation
+                                        </button>
+                                        <button onclick="goToWishlist()" class="btn btn-outline">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Page: Book Details -->
+            <main id="page-details" class="p-6 space-y-8 hidden">
+                <div class="space-y-2">
+                    <button onclick="goToWishlist()" class="btn btn-outline mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+                        Back to Wishlist
+                    </button>
+                    <h1 class="text-3xl font-bold">Book Details</h1>
+                    <p style="color: hsl(var(--muted-foreground));">Detailed information about this book</p>
+                </div>
+
+                <div class="max-w-4xl">
+                    <div class="grid gap-6 md:grid-cols-3">
+                        <div class="card md:col-span-1">
+                            <div class="p-6">
+                                <div id="details-book-cover" class="w-full aspect-[2/3] rounded-md shadow-lg" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);"></div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-6 md:col-span-2">
+                            <div class="card">
+                                <div class="p-6 space-y-4">
+                                    <div>
+                                        <h2 class="text-2xl font-bold" id="details-book-title"></h2>
+                                        <p class="text-lg mt-1" style="color: hsl(var(--muted-foreground));" id="details-book-author"></p>
+                                    </div>
+                                    <span class="badge badge-outline" style="border-color: hsl(var(--primary)); color: hsl(var(--primary));" id="details-book-status"></span>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="p-6 space-y-4">
+                                    <h3 class="text-xl font-semibold">Description</h3>
+                                    <p id="details-book-description" style="color: hsl(var(--muted-foreground)); line-height: 1.6;"></p>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="p-6 space-y-4">
+                                    <h3 class="text-xl font-semibold">Book Information</h3>
+                                    <div class="grid gap-3">
+                                        <div class="flex justify-between py-2" style="border-bottom: 1px solid hsl(var(--border));">
+                                            <span style="color: hsl(var(--muted-foreground));">ISBN</span>
+                                            <span class="font-medium">978-1-234-56789-0</span>
+                                        </div>
+                                        <div class="flex justify-between py-2" style="border-bottom: 1px solid hsl(var(--border));">
+                                            <span style="color: hsl(var(--muted-foreground));">Publisher</span>
+                                            <span class="font-medium">Publisher Name</span>
+                                        </div>
+                                        <div class="flex justify-between py-2" style="border-bottom: 1px solid hsl(var(--border));">
+                                            <span style="color: hsl(var(--muted-foreground));">Publication Year</span>
+                                            <span class="font-medium">2023</span>
+                                        </div>
+                                        <div class="flex justify-between py-2">
+                                            <span style="color: hsl(var(--muted-foreground));">Genre</span>
+                                            <span class="font-medium">Fiction</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-3">
+                                <button onclick="reserveBookFromDetails()" class="btn" style="background-color: hsl(var(--primary)); color: hsl(var(--primary-foreground)); flex: 1;">
+                                    Reserve This Book
+                                </button>
+                                <button onclick="goToWishlist()" class="btn btn-outline">Back to Wishlist</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Page: Edit Profile -->
+            <main id="page-edit-profile" class="p-6 space-y-8 hidden">
+                <div class="space-y-2">
+                    <button onclick="goToProfile()" class="btn btn-outline mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+                        Back to Profile
+                    </button>
+                    <h1 class="text-3xl font-bold">Edit Profile</h1>
+                    <p style="color: hsl(var(--muted-foreground));">Update your account information</p>
+                </div>
+
+                <div class="max-w-3xl">
+                    <form onsubmit="saveProfile(event)" class="space-y-6">
+                        <div class="card">
+                            <div class="p-6 space-y-6">
+                                <div class="flex items-center gap-6">
+                                    <div class="flex h-24 w-24 items-center justify-center rounded-full text-4xl font-bold" style="background-color: hsl(var(--primary)); color: hsl(var(--primary-foreground));">
+                                        A
+                                    </div>
+                                    <button type="button" class="btn btn-outline">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                                        Change Photo
+                                    </button>
+                                </div>
+
+                                <div class="space-y-4">
+                                    <div class="space-y-2">
+                                        <label class="text-sm font-medium" style="color: hsl(var(--muted-foreground));">Full Name</label>
+                                        <input type="text" id="edit-name" value="Alex Thompson" class="input" required>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <label class="text-sm font-medium" style="color: hsl(var(--muted-foreground));">Email Address</label>
+                                        <input type="email" id="edit-email" value="alex.thompson@email.com" class="input" required>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <label class="text-sm font-medium" style="color: hsl(var(--muted-foreground));">Phone Number</label>
+                                        <input type="tel" id="edit-phone" value="+1 (555) 123-4567" class="input" required>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <label class="text-sm font-medium" style="color: hsl(var(--muted-foreground));">Address</label>
+                                        <input type="text" id="edit-address" value="123 Library Street, Booktown, BK 12345" class="input" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="p-6 space-y-4">
+                                <h3 class="text-xl font-semibold">Notification Preferences</h3>
+                                <div class="space-y-3">
+                                    <label class="flex items-center gap-3 cursor-pointer">
+                                        <input type="checkbox" checked class="w-4 h-4" style="accent-color: hsl(var(--primary));">
+                                        <span>Email notifications for due dates</span>
+                                    </label>
+                                    <label class="flex items-center gap-3 cursor-pointer">
+                                        <input type="checkbox" checked class="w-4 h-4" style="accent-color: hsl(var(--primary));">
+                                        <span>SMS notifications for holds</span>
+                                    </label>
+                                    <label class="flex items-center gap-3 cursor-pointer">
+                                        <input type="checkbox" class="w-4 h-4" style="accent-color: hsl(var(--primary));">
+                                        <span>Newsletter and updates</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-3">
+                            <button type="submit" class="btn" style="background-color: hsl(var(--primary)); color: hsl(var(--primary-foreground)); flex: 1;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                                Save Changes
+                            </button>
+                            <button type="button" onclick="goToProfile()" class="btn btn-outline">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </main>
+
+            <!-- Page: Add Book to Wishlist -->
+            <main id="page-add-book" class="p-6 space-y-8 hidden">
+                <div class="max-w-2xl mx-auto">
+                    <div class="space-y-2 mb-6">
+                        <h1 class="text-3xl font-bold flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: hsl(var(--primary));"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                            Add Book to Wishlist
+                        </h1>
+                        <p style="color: hsl(var(--muted-foreground));">Add a new book to your reading wishlist</p>
+                    </div>
+
+                    <form onsubmit="saveNewBook(event)" class="space-y-6">
+                        <div class="card">
+                            <div class="p-6 space-y-4">
+                                <h3 class="text-xl font-semibold">Book Information</h3>
+                                <div class="space-y-4">
+                                    <div class="space-y-2">
+                                        <label for="new-book-title" class="text-sm font-medium" style="color: hsl(var(--muted-foreground));">Book Title *</label>
+                                        <input type="text" id="new-book-title" class="input" placeholder="Enter book title" required>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <label for="new-book-author" class="text-sm font-medium" style="color: hsl(var(--muted-foreground));">Author *</label>
+                                        <input type="text" id="new-book-author" class="input" placeholder="Enter author name" required>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <label for="new-book-isbn" class="text-sm font-medium" style="color: hsl(var(--muted-foreground));">ISBN (Optional)</label>
+                                        <input type="text" id="new-book-isbn" class="input" placeholder="Enter ISBN number">
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <label for="new-book-genre" class="text-sm font-medium" style="color: hsl(var(--muted-foreground));">Genre</label>
+                                        <select id="new-book-genre" class="input">
+                                            <option value="">Select a genre</option>
+                                            <option value="Fiction">Fiction</option>
+                                            <option value="Non-Fiction">Non-Fiction</option>
+                                            <option value="Mystery">Mystery</option>
+                                            <option value="Science Fiction">Science Fiction</option>
+                                            <option value="Fantasy">Fantasy</option>
+                                            <option value="Romance">Romance</option>
+                                            <option value="Thriller">Thriller</option>
+                                            <option value="Biography">Biography</option>
+                                            <option value="History">History</option>
+                                            <option value="Self-Help">Self-Help</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <label for="new-book-description" class="text-sm font-medium" style="color: hsl(var(--muted-foreground));">Description (Optional)</label>
+                                        <textarea id="new-book-description" class="input" rows="4" placeholder="Enter a brief description of the book"></textarea>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <label for="new-book-priority" class="text-sm font-medium" style="color: hsl(var(--muted-foreground));">Priority</label>
+                                        <select id="new-book-priority" class="input">
+                                            <option value="Low">Low</option>
+                                            <option value="Medium" selected>Medium</option>
+                                            <option value="High">High</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <label class="flex items-center gap-3 cursor-pointer">
+                                            <input type="checkbox" id="new-book-notify" class="w-4 h-4" style="accent-color: hsl(var(--primary));">
+                                            <span>Notify me when this book becomes available</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-3">
+                            <button type="submit" class="btn" style="background-color: hsl(var(--primary)); color: hsl(var(--primary-foreground)); flex: 1;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                                Add to Wishlist
+                            </button>
+                            <button type="button" onclick="goToWishlist()" class="btn btn-outline">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // --- ADD THIS ENTIRE BLOCK OF NEW CODE ---
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // IMPORTANT: Make sure this URL is correct for your project!
+    const profileUrl = '/Library/api/user/profile';
+
+    fetch(profileUrl)
+        .then(response => {
+            if (!response.ok) {
+                // If not logged in, redirect to the login page.
+                window.location.href = 'login.html';
+                throw new Error('Not authorized');
+            }
+            return response.json(); // Parse the JSON from the response
+        })
+        .then(user => {
+            // We have the data! Now, update all the elements using their new IDs.
+            
+            // Get the user's first name and initial
+            const firstName = user.name.split(' ')[0];
+            const initial = user.name.charAt(0).toUpperCase();
+
+            // 1. Update Header
+            document.getElementById('headerUserName').textContent = user.name;
+            document.getElementById('headerUserInitial').textContent = initial;
+
+            // 2. Update Welcome Message
+            document.getElementById('welcomeMessage').textContent = `Welcome back, ${firstName}! 👋`;
+            
+            // 3. Update Profile Page Display
+            document.getElementById('profileFullName').textContent = user.name;
+            document.getElementById('profileUserInitial').textContent = initial;
+            document.getElementById('profileEmail').value = user.email;
+            // Note: phone and address are not in your User object yet, so they will show default text.
+
+            // 4. Update the "Edit Profile" Form with existing data
+            // (Your existing inputs `edit-name` and `edit-email` are used here)
+            document.getElementById('edit-name').value = user.name;
+            document.getElementById('edit-email').value = user.email;
+        })
+        .catch(error => {
+            console.error('Error fetching user profile:', error);
+        });
+});
+// --- END OF NEW CODE ---
+
+// Your existing script continues below...
+// let currentBookForReserve = { ... };
+        // State management
+        let currentBookForReserve = { title: '', author: '', cover: '' };
+        let currentBookForDetails = { title: '', author: '', status: '', description: '' };
+        let wishlistBooks = [];
+
+        // Navigation functionality
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('main[id^="page-"]');
+        const searchInput = document.getElementById('searchInput');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+
+        // Handle navigation
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                const pageName = this.getAttribute('data-page');
+                showPage(pageName);
+            });
+        });
+
+        function showPage(pageName) {
+            // Update active state
+            navLinks.forEach(l => l.classList.remove('active'));
+            document.querySelector(`[data-page="${pageName}"]`)?.classList.add('active');
+
+            // Show selected page
+            pages.forEach(page => {
+                if (page.id === `page-${pageName}`) {
+                    page.classList.remove('hidden');
+                } else {
+                    page.classList.add('hidden');
+                }
+            });
+
+            // Update search placeholder
+            const placeholders = {
+                'books': 'Search books, authors, or genres...',
+                'wishlist': 'Search wishlist...',
+                'history': 'Search history...',
+                'profile': 'Search...'
+            };
+            searchInput.placeholder = placeholders[pageName] || 'Search...';
+
+            // Close sidebar on mobile
+            if (window.innerWidth < 768) {
+                sidebar.classList.remove('open');
+            }
+        }
+
+        // Search functionality
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const activePage = document.querySelector('main:not(.hidden)');
+            
+            if (activePage.id === 'page-wishlist') {
+                const wishlistItems = document.querySelectorAll('.wishlist-item');
+                wishlistItems.forEach(item => {
+                    const title = item.getAttribute('data-title').toLowerCase();
+                    const author = item.getAttribute('data-author').toLowerCase();
+                    if (title.includes(searchTerm) || author.includes(searchTerm)) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            }
+        });
+
+        // Reserve book functionality
+        function reserveBook(title, author) {
+            currentBookForReserve = { title, author };
+            document.getElementById('reserve-book-title').textContent = title;
+            document.getElementById('reserve-book-title-main').textContent = title;
+            document.getElementById('reserve-book-author').textContent = author;
+            
+            pages.forEach(page => page.classList.add('hidden'));
+            document.getElementById('page-reserve').classList.remove('hidden');
+        }
+
+        function confirmReservation() {
+            alert(`Book "${currentBookForReserve.title}" has been reserved successfully! You will be notified when it's ready for pickup.`);
+            goToWishlist();
+        }
+
+        // View details functionality
+        function viewBookDetails(title, author, status, description) {
+            currentBookForDetails = { title, author, status, description };
+            document.getElementById('details-book-title').textContent = title;
+            document.getElementById('details-book-author').textContent = author;
+            document.getElementById('details-book-status').textContent = status;
+            document.getElementById('details-book-description').textContent = description;
+            
+            pages.forEach(page => page.classList.add('hidden'));
+            document.getElementById('page-details').classList.remove('hidden');
+        }
+
+        function reserveBookFromDetails() {
+            reserveBook(currentBookForDetails.title, currentBookForDetails.author);
+        }
+
+        // Edit profile functionality
+        function editProfile() {
+            pages.forEach(page => page.classList.add('hidden'));
+            document.getElementById('page-edit-profile').classList.remove('hidden');
+        }
+
+        function saveProfile(event) {
+            event.preventDefault();
+            const name = document.getElementById('edit-name').value;
+            const email = document.getElementById('edit-email').value;
+            const phone = document.getElementById('edit-phone').value;
+            const address = document.getElementById('edit-address').value;
+            
+            alert('Profile updated successfully!');
+            goToProfile();
+        }
+
+        // Add book functionality
+        function addBookToWishlist() {
+            pages.forEach(page => page.classList.add('hidden'));
+            document.getElementById('page-add-book').classList.remove('hidden');
+            
+            // Clear form
+            document.getElementById('new-book-title').value = '';
+            document.getElementById('new-book-author').value = '';
+            document.getElementById('new-book-isbn').value = '';
+            document.getElementById('new-book-genre').value = '';
+            document.getElementById('new-book-description').value = '';
+            document.getElementById('new-book-priority').value = 'Medium';
+            document.getElementById('new-book-notify').checked = false;
+        }
+
+        function saveNewBook(event) {
+            event.preventDefault();
+            const title = document.getElementById('new-book-title').value;
+            const author = document.getElementById('new-book-author').value;
+            const isbn = document.getElementById('new-book-isbn').value;
+            const genre = document.getElementById('new-book-genre').value || 'Other';
+            const description = document.getElementById('new-book-description').value || 'A great book to read.';
+            const priority = document.getElementById('new-book-priority').value;
+            const notify = document.getElementById('new-book-notify').checked;
+            
+            // Get genre class
+            const genreClass = getGenreClass(genre);
+            
+            // Create new book card
+            const wishlistContainer = document.getElementById('wishlist-items');
+            const newBookCard = document.createElement('div');
+            newBookCard.className = 'card wishlist-item';
+            newBookCard.setAttribute('data-title', title);
+            newBookCard.setAttribute('data-author', author);
+            newBookCard.setAttribute('data-status', 'Available');
+            newBookCard.setAttribute('data-genre', genre);
+            
+            newBookCard.innerHTML = `
+                <div class="p-6">
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="h-40 w-28 rounded-md shadow-md genre-box ${genreClass}">
+                                <div class="genre-title text-sm">${genre}</div>
+                            </div>
+                        </div>
+                        <div class="flex flex-1 flex-col justify-between">
+                            <div>
+                                <h4 class="font-semibold">${title}</h4>
+                                <p class="mt-1 text-sm" style="color: hsl(var(--muted-foreground));">${author}</p>
+                                ${isbn ? `<p class="mt-1 text-xs" style="color: hsl(var(--muted-foreground));">ISBN: ${isbn}</p>` : ''}
+                            </div>
+                            <div class="space-y-2">
+                                <span class="badge badge-outline" style="border-color: hsl(var(--primary)); color: hsl(var(--primary));">Available</span>
+                                ${priority !== 'Medium' ? `<span class="badge badge-outline ${priority === 'High' ? 'badge-warning' : ''}" style="${priority === 'Low' ? 'border-color: hsl(var(--muted-foreground)); color: hsl(var(--muted-foreground));' : ''}">${priority} Priority</span>` : ''}
+                                <div class="flex gap-2 flex-wrap">
+                                    <button class="btn btn-outline text-xs py-1 px-3 view-details-btn" onclick="viewBookDetails('${title}', '${author}', 'Available', '${description}')">View Details</button>
+                                    <button class="btn btn-outline text-xs py-1 px-3" onclick="reserveBook('${title}', '${author}')">Reserve</button>
+                                    <button class="btn btn-remove text-xs py-1 px-3" onclick="removeFromWishlist(this)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            wishlistContainer.insertBefore(newBookCard, wishlistContainer.firstChild);
+            
+            alert(`"${title}" has been added to your wishlist!${notify ? ' You will be notified when it becomes available.' : ''}`);
+            goToWishlist();
+        }
+
+        // Helper function to get genre class
+        function getGenreClass(genre) {
+            const genreMap = {
+                'Fiction': 'genre-fiction',
+                'Non-Fiction': 'genre-non-fiction',
+                'Mystery': 'genre-mystery',
+                'Science Fiction': 'genre-science-fiction',
+                'Fantasy': 'genre-fantasy',
+                'Romance': 'genre-romance',
+                'Thriller': 'genre-thriller',
+                'Biography': 'genre-biography',
+                'History': 'genre-history',
+                'Self-Help': 'genre-self-help',
+                'Other': 'genre-other'
+            };
+            return genreMap[genre] || 'genre-other';
+        }
+
+        // Remove from wishlist function
+        function removeFromWishlist(button) {
+            const card = button.closest('.wishlist-item');
+            const title = card.getAttribute('data-title');
+            
+            if (confirm(`Are you sure you want to remove "${title}" from your wishlist?`)) {
+                card.style.opacity = '0';
+                card.style.transform = 'scale(0.9)';
+                card.style.transition = 'all 0.3s ease';
+                setTimeout(() => {
+                    card.remove();
+                }, 300);
+            }
+        }
+
+        // Navigation helpers
+        function goToWishlist() {
+            showPage('wishlist');
+        }
+
+        function goToProfile() {
+            showPage('profile');
+        }
+
+        // Sidebar toggle for mobile
+        sidebarToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('open');
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            if (window.innerWidth < 768) {
+                if (!sidebar.contains(event.target) && !sidebarToggle.contains(event.target)) {
+                    sidebar.classList.remove('open');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
