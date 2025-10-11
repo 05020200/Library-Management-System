@@ -8,6 +8,33 @@
     <meta charset="UTF-8">
 
     <style>
+        /* Add this new style for the dashboard background */
+
+#main-content {
+    position: relative; /* This is needed for the overlay effect */
+    z-index: 0;
+}
+
+#main-content::before {
+    content: '';
+    position: absolute;
+    top: 0; 
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    /* Your background image */
+    background-image: url('images/liblog.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Keeps image still on scroll */
+
+    /* Adjust this to make the image more or less visible */
+    opacity: 0.3; 
+    
+    z-index: -1; /* Places the image behind your content */
+}
         :root {
             --primary: 221 83% 53%;
             --primary-foreground: 210 40% 98%;
@@ -411,7 +438,7 @@ genre-box {
         </aside>
 
         <!-- Main Content -->
-        <div class="flex-1">
+        <div id="main-content" class="flex-1">
             <!-- Header -->
             <header class="sticky top-0 z-10 border-b" style="border-color: hsl(var(--border)); background-color: hsl(var(--card) / 0.95); backdrop-filter: blur(8px);">
                 <div class="flex h-16 items-center gap-4 px-6">
