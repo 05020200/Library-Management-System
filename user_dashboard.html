@@ -462,12 +462,13 @@ genre-box {
                 </div>
             </header>
 
-            <!-- Page: My Books -->
-            <main id="page-books" class="p-6 space-y-8">
-                <div class="space-y-2">
-                  <h1 class="text-3xl font-bold" id="welcomeMessage">Welcome back! 👋</h1>
-                    <p style="color: hsl(var(--muted-foreground));">Here's what's happening with your library account today</p>
-                </div>
+                
+          <main id="page-books" class="p-6 space-y-8">
+    <div class="space-y-2">
+        <h1 class="text-3xl font-bold" id="welcomeMessage">Welcome back! 👋</h1>
+        <p style="color: hsl(var(--muted-foreground));">Here's what's happening with your library account today</p>
+    </div>
+
 
                 <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                     <div class="card">
@@ -527,17 +528,24 @@ genre-box {
                     </div>
                 </div>
 
-                <div class="space-y-4">
-                    <div>
-                        <h2 class="text-2xl font-bold">Currently Borrowed Books</h2>
-                        <p class="text-sm mt-1" style="color: hsl(var(--muted-foreground));">Keep track of your reading deadlines</p>
-                    </div>
-
-                 
-                      <div id="books-container" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div class="space-y-4">
+        <div>
+            <h2 class="text-2xl font-bold">Currently Borrowed</h2>
+            <p class="text-sm mt-1" style="color: hsl(var(--muted-foreground));">Keep track of your reading deadlines</p>
+        </div>
+        <div id="borrowed-books-container" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            </div>
     </div>
-                
-            </main>
+    
+    <div class="space-y-4">
+        <div>
+            <h2 class="text-2xl font-bold">Books on Hold</h2>
+            <p class="text-sm mt-1" style="color: hsl(var(--muted-foreground));">Books you have reserved</p>
+        </div>
+        <div id="held-books-container" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            </div>
+    </div>
+</main>
 
             <!-- Page: Wishlist -->
             <main id="page-wishlist" class="p-6 space-y-8 hidden">
@@ -1130,6 +1138,34 @@ genre-box {
     </div>
 
     <script>
+        function createBookCard(book, type) {
+    const genreClass = getGenreClass(book.genre || 'Other');
+    
+    let detailsHTML = '';
+    // This 'if' block correctly handles the display for borrowed vs. on-hold books
+    if (type === 'borrowed') {
+        detailsHTML = `
+            <div class="flex items-center gap-2 text-sm" style="color: hsl(var(--muted-foreground));">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                <span>Due: ${book.dueDate}</span>
+            </div>
+            <span class="badge badge-outline badge-success">Borrowed</span>
+        `;
+    } else { // 'onHold'
+        detailsHTML = `<span class="badge badge-outline badge-warning">On Hold</span>`;
+    }
+
+// The main div now has data-title and data-author attributes
+    return `<div class="card" data-title="${book.title}" data-author="${book.author}">
+                <div class="p-4 flex gap-4">
+                    <div class="flex-shrink-0"><div class="h-40 w-28 rounded-md shadow-md genre-box ${genreClass}"><div class="genre-title text-sm">${book.genre || 'General'}</div></div></div>
+                    <div class="flex-1 flex flex-col justify-between">
+                        <div><h4 class="font-semibold">${book.title}</h4><p class="mt-1 text-sm">${book.author}</p></div>
+                        <div class="space-y-2">${detailsHTML}</div>
+                    </div>
+                </div>
+            </div>`;
+}
 
     
 // --- Simplified updateUserDisplay function ---
@@ -1185,7 +1221,31 @@ function saveProfile(event) {
             .then(user => {
                 updateUserDisplay(user);
             });
+fetch('/Library/api/my-books')
+        .then(response => response.json())
+        .then(data => {
+            const borrowedContainer = document.getElementById('borrowed-books-container');
+            const heldContainer = document.getElementById('held-books-container');
+            borrowedContainer.innerHTML = ''; // Clear any old content
+            heldContainer.innerHTML = '';   // Clear any old content
+            
+            // Populate the "Currently Borrowed" section with the correct data
+            data.borrowed.forEach(book => {
+                const bookCardHTML = createBookCard(book, 'borrowed');
+                borrowedContainer.innerHTML += bookCardHTML;
+            });
+            
+            // Populate the "Books on Hold" section
+            data.onHold.forEach(book => {
+                const bookCardHTML = createBookCard(book, 'onHold');
+                heldContainer.innerHTML += bookCardHTML;
+            });
 
+            // Update the counts at the top of the page to match the data
+            document.getElementById('borrowed-count').textContent = data.borrowed.length;
+            document.getElementById('held-count').textContent = data.onHold.length;
+            // You can add logic for the overdue count here later
+        });
         // Add other startup functions here (like loading the wishlist)
     });
 
@@ -1210,7 +1270,7 @@ function saveProfile(event) {
 document.addEventListener('DOMContentLoaded', function() {
     
     // IMPORTANT: Make sure this URL is correct for your project!
-    const profileUrl = '/Library/api/user/profile';
+   const profileUrl = '/Library/api/user/profile';
 
     fetch(profileUrl)
         .then(response => {
@@ -1249,6 +1309,31 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => {
             console.error('Error fetching user profile:', error);
         });
+        // --- ADD THIS ENTIRE SEARCH CODE BLOCK ---
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase().trim();
+        const activePage = document.querySelector('main:not(.hidden)');
+
+        let itemsToFilter = [];
+
+        // Determine which book cards to filter based on the active page
+        if (activePage.id === 'page-books') {
+            // On "My Books", get cards from both borrowed and on-hold sections
+            itemsToFilter = document.querySelectorAll('#borrowed-books-container .card, #held-books-container .card');
+        } 
+        // Loop through the items and show/hide them based on the search term
+        itemsToFilter.forEach(item => {
+            const title = item.getAttribute('data-title').toLowerCase();
+            const author = item.getAttribute('data-author').toLowerCase();
+            
+            if (title.includes(searchTerm) || author.includes(searchTerm)) {
+                item.style.display = ''; // Show the card if it matches
+            } else {
+                item.style.display = 'none'; // Hide the card if it doesn't match
+            }
+        });
+    });
 });
 // --- END OF NEW CODE ---
 
